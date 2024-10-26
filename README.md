@@ -1,38 +1,42 @@
-## Structure
 
-- cv.typ: Content of the CV.
-- meta.typ: CV template code.
-- justfile: Recipe file for building.
+## Project Structure
 
-## Features
+- **cv.typ**: CV content source file.
+- **meta.typ**: Template code for the CV.
+- **justfile**: Build recipe file.
 
-- [x] Support both Chinese and English in one file. Default to Chinese.
-- [x] Support hiding some sections for conciseness. Default to display all.
+## Key Features
 
-## Generation
+- [x] Supports both Chinese and English in a single file (defaults to Chinese).
+- [x] Allows selective section hiding for streamlined output (default: all sections visible).
 
-- Upload cv.typ and meta.typ to [typst](https://typst.app/), and use web app to generate.
-- Using [just](https://github.com/casey/just), with arguments:
-  - `la`: Choose between Chinese (zh) or English (en).
-  - `output`: Choose between concise or full for output.
-- Examples:
-  - `just` generates a concise PDF file in Chinese.
-  - `just compile-all` generates all types of PDF files.
-  - `just compile en full` generates a full PDF file in English.
-- Using `bash`
+## PDF Generation Instructions
 
-```bash
-echo '#let render_mode = (la: "zh", output: "concise")' > f.typ && sed 1d cv.typ >> f.typ && typst compile f.typ cv.pdf && rm f.typ
-```
+1. **Using Typst Web Application**:
+   - Upload `cv.typ` and `meta.typ` files to [Typst](https://typst.app/) and utilize the web interface for generation.
 
-![cv.png](cv.png))
+2. **Using Just Command-Line Tool** ([Just](https://github.com/casey/just)):
+   - **Options**:
+     - `la`: Language choice between Chinese (`zh`) and English (`en`).
+     - `output`: Choose between `concise` or `full` output modes.
+   - **Examples**:
+     - `just`: Generates a concise PDF in Chinese.
+     - `just compile-all`: Produces all PDF variations.
+     - `just compile en full`: Outputs a full English PDF.
 
-## Reference
+3. **Using Bash**:
+   ```bash
+   echo '#let render_mode = (la: "zh", output: "concise")' > f.typ && sed 1d cv.typ >> f.typ && typst compile f.typ cv.pdf && rm f.typ
+   ```
 
-- [typst](https://typst.app/docs/)
-  - [conditional render](https://typst.app/docs/reference/scripting/#conditionals)
-- [chicv](https://github.com/skyzh/chicv)
-- [just](https://just.systems/man/zh/)
+## Preview
+
+![Preview of CV](cv.png)
+
+## Additional References
+
+- [Typst Documentation](https://typst.app/docs/)
+  - [Conditional Rendering](https://typst.app/docs/tutorials/conditional-rendering)
 
 ## FAQ
 
