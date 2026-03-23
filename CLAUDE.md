@@ -7,28 +7,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Requires [Just](https://github.com/casey/just) and [Typst](https://typst.app/) installed.
 
 ```bash
-just                        # Build default: Chinese, concise → cv.pdf
-just compile zh full        # Build Chinese full version → cv_zh_full.pdf
-just compile en concise     # Build English concise version → cv_en_concise.pdf
-just compile-all            # Build all 3 variants
+just                        # Default: Chinese concise
+just zh                     # Chinese concise (shortcut)
+just zh-full                # Chinese full
+just en                     # English concise (shortcut)
+just en-full                # English full
+just all                    # All variants
+just clean                  # Clean PDFs
+just fonts                  # Check available fonts
 ```
 
 Without `just`:
 ```bash
-echo '#let render_mode = (la: "zh", output: "concise")' > f.typ && sed 1d cv.typ >> f.typ && typst compile f.typ cv.pdf && rm f.typ
+typst compile --input la=zh --input output=concise cv.typ cv.pdf
 ```
 
 Check available fonts: `typst fonts`
 
 ## Architecture
 
-The build system injects a `render_mode` variable at the top of `cv.typ` before compilation (since Typst doesn't support CLI variable injection natively). The justfile prepends the mode line and strips the placeholder first line of `cv.typ`.
+The build system passes variables via `--input` flags. `cv.typ` reads from `sys.inputs` with defaults.
 
 ### Files
 
-- **cv.typ** — Main document. Line 1 is a placeholder `render_mode` declaration (overwritten at build time). Defines rendering helpers and calls section renderers.
+- **cv.typ** — Main document. Defines rendering helpers and calls section renderers.
 - **meta.typ** — Utility functions: `today()` (Chinese date) and `today_en()` (English date).
-- **data-zh.yaml** — CV content in Chinese. An `data-en.yaml` file should be created for English output.
+- **data-zh.yaml** — CV content in Chinese.
+- **data-en.yaml** — CV content in English (translated using `.claude/skills/cv-yaml-translator`).
 - **justfile** — Build recipes.
 
 ### Render Mode
