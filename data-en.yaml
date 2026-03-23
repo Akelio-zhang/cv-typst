@@ -1,0 +1,78 @@
+sections:
+  - key: education
+  - key: work
+  - key: projects
+  - key: skills
+  - key: languages
+  - key: awards
+  # Note: `contact` is never listed here — rendered separately
+
+contact:
+  name: Zhang San
+  email: hello@outlook_ms.com
+  phone: +86 188 8888 8888
+  github:
+    url: https://www.github.com
+    text: github.com
+
+education:
+  title: Education
+  entries:
+    - name: Computer Science, XX University
+      date: 2016/09 -- 2020/06
+      desc: GPA 3.8/4.0
+      location: Beijing
+      details:
+        - Awarded First-Class University Scholarship
+        - Served as President of Student Union Technology Department
+
+work:
+  title: Work Experience
+  entries:
+    - name: Technology Co., Ltd.
+      date: 2020/07 -- Present
+      desc: Full-Stack Engineer
+      location: Shanghai
+      details:
+        - Developed enterprise applications using React and Node.js
+        - Led a 5-person team to deliver projects on time
+      links:
+        - url: https://example.com
+          text: Project Demo
+
+
+projects:
+  title: Projects
+  entries:
+    - name: Technology Co., Ltd.
+      date: 2022/06 -- 2023/12
+      desc: Full-Stack Engineer
+      location: Shanghai
+      details:
+        - Developed enterprise applications using React and Node.js
+        - Led a 5-person team to deliver projects on time
+      links:
+        - url: https://example.com
+          text: Project Demo
+
+skills:
+  title: Technical Skills
+  entries:
+    - details:
+        - "Languages: Python, JavaScript, Java"
+        - "Frameworks: React, Vue, Spring Boot"
+
+languages:
+  title: Languages
+  entries:
+    - details:
+       - "English: Business Proficiency"
+       - "Mandarin: Native"
+
+awards:
+  title: Awards
+  entries:
+    - name: Outstanding Employee
+      date: 2024-12-01
+
+# Other sections follow similar structure...

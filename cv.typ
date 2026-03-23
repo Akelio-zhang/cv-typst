@@ -1,9 +1,12 @@
-#let render_mode = (la: "zh", output: "concise")
+#let render_mode = (
+  la: sys.inputs.at("la", default: "zh"),
+  output: sys.inputs.at("output", default: "concise")
+)
 
 #import "meta.typ": *
 
-#set text(font: ("New Computer Modern", "Noto Serif CJK SC"))
-#show heading: set text(font: ("Linux Biolinum", "Noto Serif CJK SC"))
+#set text(font: ("New Computer Modern", "Source Han Serif SC"))
+#show heading: set text(font: ("Linux Biolinum", "Source Han Serif SC"))
 
 #show link: underline
 
@@ -18,124 +21,97 @@
 #let head_color = black
 
 // Feel free to change the margin below to best fit your own CV
-#set page(
-  margin: (x: 0.9cm, y: 1.3cm),
-)
+#set page(margin: (x: 0.9cm, y: 1.3cm))
 
 // For more customizable options, please refer to official reference: https://typst.app/docs/reference/
 #set par(justify: true)
 #show heading: set text(fill: head_color)
 
-#let chiline() = {v(-3pt); line(length: 100%, stroke: head_color); v(-5pt)}
+#let chiline() = {
+  v(-3pt)
+  line(length: 100%, stroke: head_color)
+  v(-5pt)
+}
 
 // support language and output render mode switch
 #let section(body, la: "zh", output: "concise") = {
   let mode = (la: la, output: output)
-  if mode.la == render_mode.la and (mode.output == "concise" or mode.output == render_mode.output) [
+  if (
+    mode.la == render_mode.la
+      and (mode.output == "concise" or mode.output == render_mode.output)
+  ) [
     #body
   ]
 }
 
+// 加载多语言数据
+#let lang = render_mode.la
+#let data = yaml("data-" + lang + ".yaml")
 
-// default with Chinese and concise page
-#section[
-= 张三
+// 通用条目渲染器
+#let render_entry(entry) = {
+  let output_filter = "concise"
+  if "output" in entry {
+    output_filter = entry.output
+  }
+  if output_filter != "concise" and output_filter != render_mode.output {
+    return
+  }
 
-hello\@outlook_ms.com |
-+86 188 8888 8888 |
-#link("https://www.github.com")[github.com]
+  [
+    #if "name" in entry [
+      *#entry.name* #h(1fr)
+    ]
+    #if "date" in entry [
+      #entry.date
+    ]
+    #if "desc" in entry [
+      \ #entry.desc #h(1fr)
+    ]
+    #if "location" in entry [
+      #entry.location
+    ]
+    #if "details" in entry {
+      for detail in entry.details [
+        - #detail
+      ]
+    }
+  ]
+}
+
+// 联系方式渲染
+#let render_contact() = [
+  = #data.contact.name
+  #data.contact.email |
+  #data.contact.phone |
+  #link(data.contact.github.url)[#data.contact.github.text]
 ]
 
-// for English and concise page
-#section(la: "en")[
-= ZHANG San
+// 模块化section渲染
+#let render_section(module) = {
+  if module == none { return }
+  if module.at("entries", default: none) == none { return }
 
-hello\@outlook_ms.com |
-+86 188 8888 8888 |
-#link("https://www.github.com")[github.com]
-]
+  [
+    == #module.title
+    #chiline()
+    #for entry in module.entries [
+      #render_entry(entry)
+    ]
+  ]
+}
 
-#section[
-== 教育经历
-#chiline()
-
-#link("https://typst.app/")[*#lorem(2)*] #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(10)
-
-*#lorem(2)* #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(10)
-]
-
-
-#section[
-== 工作经历
-#chiline()
-
-*#lorem(2)* #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(20)
-- #lorem(40)
-
-*#lorem(2)* #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(30)
-- #lorem(10)
-]
-
-#section[
-== 项目经历
-#chiline()
-
-*#lorem(2)* #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(20)
-- #lorem(30)
-
-*#lorem(2)* #h(1fr) 2333/23 -- 2333/23 \
-#lorem(5) #h(1fr) #lorem(2) \
-- #lorem(20)
-]
-
-#section(la: "zh", output: "full")[
-
-其他项目 \
-- *#lorem(2)*#lorem(5)
-- *#lorem(1)*#lorem(10)
-
+// 主文档结构
+#render_contact()
+#for s in data.sections [
+  #if s.at("render", default: true) [
+    #render_section(data.at(s.key, default: none))
+  ]
 ]
 
 #section[
-== 技术特点
-#chiline()
-
-- #lorem(2)
-- #lorem(5)
-
-]
-
-#section[
-== 语言能力
-#chiline()
-
-- #lorem(2)
-- #lorem(2)
-
-]
-
-
-#section[
-== 获奖经历
-#chiline()
-
-- #lorem(5)
-
-]
-
-#section[
-#align(right, text(fill: gray)[更新于 #today()])
+  #align(right, text(fill: gray)[更新于 #today()])
 ]
 #section(la: "en")[
-#align(right, text(fill: gray)[Last Updated on #today_en()])
+  #align(right, text(fill: gray)[Last Updated on #today_en()])
 ]
