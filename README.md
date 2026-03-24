@@ -13,6 +13,32 @@
 - [x] YAML-driven section configuration — add, hide, or reorder sections without touching code.
 - [x] Concise and full output modes.
 
+<details>
+<summary>Data File Format (Multi-language)</summary>
+
+CV content is stored in `data-{lang}.yaml` files (e.g., `data-zh.yaml`, `data-en.yaml`).
+See the existing data files for the full structure and field reference.
+
+### Adding a New Language
+
+**Using Claude Skill (Recommended)**
+
+```bash
+/claude activate cv-yaml-translator
+```
+
+Then ask Claude to translate:
+
+> "Translate data-zh.yaml to English, creating data-en.yaml"
+
+The skill handles structure preservation and field translation automatically.
+
+**Manual Translation**
+
+Copy an existing data file (e.g., `data-zh.yaml` → `data-en.yaml`) and translate text content while keeping YAML keys, emails, URLs, and dates unchanged.
+
+</details>
+
 ## Build Commands
 
 Requires [Just](https://github.com/casey/just) and [Typst](https://typst.app/).
